@@ -1,4 +1,4 @@
-import { Configuration, OpenAIApi } from "openai";
+import { OpenAI } from "openai";
 
 import type { NextApiRequest, NextApiResponse } from "next";
 
@@ -20,19 +20,19 @@ export default async function handler(
     return;
   }
 
-  const configuration = new Configuration({
+  const openai = new OpenAI({
     apiKey: apiKey,
+    dangerouslyAllowBrowser: true
   });
 
-  const openai = new OpenAIApi(configuration);
-
-  const { data } = await openai.createChatCompletion({
+  const completion = await openai.chat.completions.create({
     model: "gpt-5-mini",
     messages: req.body.messages,
+    max_tokens: 100,
+    temperature: 0.7,
   });
 
-  const [aiRes] = data.choices;
-  const message = aiRes.message?.content || "エラーが発生しました";
+  const message = completion.choices[0]?.message?.content || "エラーが発生しました";
 
   res.status(200).json({ message: message });
 }
