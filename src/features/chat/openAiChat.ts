@@ -16,7 +16,7 @@ export async function getChatResponse(messages: Message[], apiKey: string) {
   const openai = new OpenAIApi(configuration);
 
   const { data } = await openai.createChatCompletion({
-    model: "gpt-3.5-turbo",
+    model: "gpt-5-mini",
     messages: messages,
   });
 
@@ -42,7 +42,7 @@ export async function getChatResponseStream(
     headers: headers,
     method: "POST",
     body: JSON.stringify({
-      model: "gpt-3.5-turbo",
+      model: "gpt-5-mini",
       messages: messages,
       stream: true,
       max_tokens: 200,

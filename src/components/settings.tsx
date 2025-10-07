@@ -76,7 +76,7 @@ export const Settings = ({
               ChatGPT
               APIはブラウザから直接アクセスしています。また、APIキーや会話内容はピクシブのサーバには保存されません。
               <br />
-              ※利用しているモデルはChatGPT API (GPT-3.5)です。
+              ※利用しているモデルはChatGPT API (GPT-5-mini)です。
             </div>
           </div>
           <div className="my-40">
