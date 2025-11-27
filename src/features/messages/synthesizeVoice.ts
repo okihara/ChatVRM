@@ -30,14 +30,15 @@ export async function synthesizeVoiceApi(
     apiKey: apiKey,
   };
 
-  const res = await fetch("/api/tts", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
-  const data = (await res.json()) as any;
+  // const res = await fetch("/api/tts", {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify(body),
+  // });
+  // const data = (await res.json()) as any;
+  const data = { audio: null };
 
   return { audio: data.audio };
 }
