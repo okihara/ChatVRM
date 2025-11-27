@@ -94,23 +94,23 @@ export const Introduction = ({
         </div>
 
         <div className="my-24">
-          <div className="my-8 font-bold typography-20 text-secondary">
+          {/* <div className="my-8 font-bold typography-20 text-secondary">
             Koeiromap APIキー
-          </div>
+          </div> */}
           <input
-            type="text"
+            type="hidden"
             placeholder="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
             value={koeiroMapKey}
             onChange={handleKoeiromapKeyChange}
             className="my-4 px-16 py-8 w-full h-40 bg-surface3 hover:bg-surface3-hover rounded-4 text-ellipsis"
           ></input>
-          <div>
+          {/* <div>
             APIキーはrinna Developersから発行してください。
             <Link
               url="https://developers.rinna.co.jp/product/#product=koeiromap-free"
               label="詳細はこちら"
             />
-          </div>
+          </div> */}
         </div>
         <div className="my-24">
           <div className="my-8 font-bold typography-20 text-secondary">
