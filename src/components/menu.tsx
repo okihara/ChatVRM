@@ -1,4 +1,3 @@
-import { IconButton } from "./iconButton";
 import { Message } from "@/features/messages/messages";
 import { KoeiroParam } from "@/features/constants/koeiroParam";
 import { ChatLog } from "./chatLog";
@@ -101,34 +100,34 @@ export const Menu = ({
   return (
     <>
       <div className="absolute z-10 m-24">
-        <div className="grid grid-flow-col gap-[8px] items-center">
+        <div className="grid grid-flow-col gap-[16px] items-center">
           <img
             src="/images/gage_heart.png"
             alt=""
             className="w-[48px] h-[48px]"
           />
-          <IconButton
-            iconName="24/Menu"
-            label="設定"
-            isProcessing={false}
+          <button
+            className="text-black hover:opacity-70 px-2 py-1-widest"
             onClick={() => setShowSettings(true)}
-          />
-          {showChatLog ? (
-            <IconButton
-              iconName="24/CommentOutline"
-              label="会話ログ"
-              isProcessing={false}
-              onClick={() => setShowChatLog(false)}
-            />
-          ) : (
-            <IconButton
-              iconName="24/CommentFill"
-              label="会話ログ"
-              isProcessing={false}
-              disabled={chatLog.length <= 0}
-              onClick={() => setShowChatLog(true)}
-            />
-          )}
+          >
+            SETTINGS
+          </button>
+          <button
+            className={`text-black px-2 py-1 ${
+              chatLog.length <= 0 && !showChatLog
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:opacity-70"
+            }`}
+            disabled={chatLog.length <= 0 && !showChatLog}
+            onClick={() => setShowChatLog(!showChatLog)}
+          >
+            TALK
+          </button>
+          <button
+            className="text-black hover:opacity-70 px-2 py-1-widest"
+          >
+            MEMORY
+          </button>
         </div>
       </div>
       {showChatLog && <ChatLog messages={chatLog} />}
