@@ -92,7 +92,7 @@ export class Viewer {
 
     // camera
     this._camera = new THREE.PerspectiveCamera(20.0, width / height, 0.1, 20.0);
-    this._camera.position.set(0, 1.3, 1.5);
+    this._camera.position.set(0, 1.0, 3.5);
     this._cameraControls?.target.set(0, 1.3, 0);
     this._cameraControls?.update();
     // camera controls
@@ -139,12 +139,13 @@ export class Viewer {
 
     if (headNode) {
       const headWPos = headNode.getWorldPosition(new THREE.Vector3());
+      const offsetY = -0.1; // カメラを下げるオフセット
       this._camera?.position.set(
         this._camera.position.x,
-        headWPos.y,
+        headWPos.y + offsetY,
         this._camera.position.z
       );
-      this._cameraControls?.target.set(headWPos.x, headWPos.y, headWPos.z);
+      this._cameraControls?.target.set(headWPos.x, headWPos.y + offsetY, headWPos.z);
       this._cameraControls?.update();
     }
   }
