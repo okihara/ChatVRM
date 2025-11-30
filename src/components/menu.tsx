@@ -99,8 +99,8 @@ export const Menu = ({
 
   return (
     <>
-      <div className="absolute z-10 m-24">
-        <div className="grid grid-flow-col gap-[16px] items-center">
+      <div className="mt-16 mx-16">
+        <div className="grid grid-flow-col gap-[16px] items-start">
           <img
             src="/images/gage_heart.png"
             alt=""
@@ -128,6 +128,11 @@ export const Menu = ({
           >
             MEMORY
           </button>
+          <img
+            src="/images/right_menu.png"
+            alt=""
+            className="w-[32px] h-[112px] -mr-4"
+          />
         </div>
       </div>
       {showChatLog && <ChatLog messages={chatLog} />}
