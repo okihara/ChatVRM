@@ -101,13 +101,18 @@ export const Menu = ({
   return (
     <>
       <div className="absolute z-10 m-24">
-        <div className="grid grid-flow-col gap-[8px]">
+        <div className="grid grid-flow-col gap-[8px] items-center">
+          <img
+            src="/images/gage_heart.png"
+            alt=""
+            className="w-[48px] h-[48px]"
+          />
           <IconButton
             iconName="24/Menu"
             label="設定"
             isProcessing={false}
             onClick={() => setShowSettings(true)}
-          ></IconButton>
+          />
           {showChatLog ? (
             <IconButton
               iconName="24/CommentOutline"
