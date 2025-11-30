@@ -16,7 +16,7 @@ export default function Document() {
           rel="stylesheet"
         />
       </Head>
-      <body style={{ background: "#F0F1F2" }}>
+      <body style={{ background: "linear-gradient(180deg, #F0F1F2 0%, #E7EBEE 66.52%, #B1B7BB 71.46%, #CDDBE5 100%)", minHeight: "100vh" }}>
         <Main />
         <NextScript />
       </body>
