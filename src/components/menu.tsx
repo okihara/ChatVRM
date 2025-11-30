@@ -135,7 +135,7 @@ export const Menu = ({
           />
         </div>
       </div>
-      {showChatLog && <ChatLog messages={chatLog} />}
+      {showChatLog && <ChatLog messages={chatLog} onClose={() => setShowChatLog(false)} />}
       {showSettings && (
         <Settings
           openAiKey={openAiKey}
