@@ -174,6 +174,14 @@ export default function Home() {
         reader.releaseLock();
       }
 
+      // 残りのメッセージがあれば追加
+      if (receivedMessage.trim()) {
+        aiTextLog += `${tag} ${receivedMessage}`;
+      }
+
+      // ストリーミング完了後に最終メッセージを設定（選択肢タグも含む完全な状態）
+      setAssistantMessage(aiTextLog);
+
       // アシスタントの返答をログに追加
       const messageLogAssistant: Message[] = [
         ...messageLog,
