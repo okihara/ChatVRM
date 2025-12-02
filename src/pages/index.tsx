@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState, useRef } from "react";
 import VrmViewer from "@/components/vrmViewer";
 import { ViewerContext } from "@/features/vrmViewer/viewerContext";
 import {
@@ -27,6 +27,9 @@ export default function Home() {
   const [chatLog, setChatLog] = useState<Message[]>([]);
   const [assistantMessage, setAssistantMessage] = useState("");
   const [hasChoices, setHasChoices] = useState(false);
+
+  // ストリーミング完了フラグ（コールバックによる上書きを防ぐ）
+  const streamCompletedRef = useRef(false);
 
   useEffect(() => {
     if (window.localStorage.getItem("chatVRMParams")) {
@@ -89,6 +92,7 @@ export default function Home() {
 
       setChatProcessing(true);
       setHasChoices(false); // 処理開始時は選択肢を非表示
+      streamCompletedRef.current = false; // ストリーミング開始
       // ユーザーの発言を追加して表示
       const messageLog: Message[] = [
         ...chatLog,
@@ -163,7 +167,10 @@ export default function Home() {
             // 文ごとに音声を生成 & 再生、返答を表示
             const currentAssistantMessage = sentences.join(" ");
             handleSpeakAi(aiTalks[0], () => {
-              setAssistantMessage(currentAssistantMessage);
+              // ストリーミング完了後はコールバックでメッセージを上書きしない
+              if (!streamCompletedRef.current) {
+                setAssistantMessage(currentAssistantMessage);
+              }
             });
           }
         }
@@ -178,6 +185,9 @@ export default function Home() {
       if (receivedMessage.trim()) {
         aiTextLog += `${tag} ${receivedMessage}`;
       }
+
+      // ストリーミング完了をマーク（これ以降コールバックでメッセージを上書きしない）
+      streamCompletedRef.current = true;
 
       // ストリーミング完了後に最終メッセージを設定（選択肢タグも含む完全な状態）
       setAssistantMessage(aiTextLog);
