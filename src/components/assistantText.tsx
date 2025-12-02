@@ -7,6 +7,7 @@ type Props = {
 };
 
 export const AssistantText = ({ message, onChoiceSelect, isProcessing }: Props) => {
+  console.log("AssistantText message: " + message);
   const parsed = parseChoices(message);
 
   // 感情タグを除去したテキスト
@@ -28,14 +29,16 @@ export const AssistantText = ({ message, onChoiceSelect, isProcessing }: Props) 
 
         {/* 選択肢ボタン部分 */}
         {parsed.hasChoices && !isProcessing && (
-          <div className="flex flex-col gap-8 mt-8">
+          <div className="flex flex-col gap-12 mt-8">
             {parsed.choices.map((choice) => (
               <button
                 key={choice.number}
                 onClick={() => onChoiceSelect?.(choice)}
-                className="w-full px-24 py-16 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-8 text-left transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg"
+                className="w-full px-24 py-16 text-white rounded-8 text-left transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:brightness-110"
                 style={{
-                  boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.3)',
+                  background: 'linear-gradient(to right, #1e40af, #7e22ce)',
+                  boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.5)',
+                  opacity: 0.8,
                 }}
               >
                 <span className="font-bold mr-8">{choice.number}.</span>

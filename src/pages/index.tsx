@@ -75,6 +75,7 @@ export default function Home() {
 
   /**
    * アシスタントとの会話を行う
+   * 送信ボタンが押された時の処理
    */
   const handleSendChat = useCallback(
     async (text: string) => {
@@ -163,7 +164,8 @@ export default function Home() {
             // 文ごとに音声を生成 & 再生、返答を表示
             const currentAssistantMessage = sentences.join(" ");
             handleSpeakAi(aiTalks[0], () => {
-              setAssistantMessage(currentAssistantMessage);
+              // console.log("currentAssistantMessage: " + currentAssistantMessage);
+              // setAssistantMessage(currentAssistantMessage);
             });
           }
         }
@@ -179,20 +181,21 @@ export default function Home() {
         aiTextLog += `${tag} ${receivedMessage}`;
       }
 
+      console.log("aiTextLog: " + aiTextLog);
       // ストリーミング完了後に最終メッセージを設定（選択肢タグも含む完全な状態）
       setAssistantMessage(aiTextLog);
 
       // アシスタントの返答をログに追加
       const messageLogAssistant: Message[] = [
-        ...messageLog,
+        ...messageLog, 
         { role: "assistant", content: aiTextLog },
       ];
 
       setChatLog(messageLogAssistant);
 
       // 選択肢があるかチェック
-      const parsed = parseChoices(aiTextLog);
-      setHasChoices(parsed.hasChoices);
+      // const parsed = parseChoices(aiTextLog);
+      // setHasChoices(parsed.hasChoices);
 
       setChatProcessing(false);
     },

@@ -55,6 +55,6 @@ export function parseChoices(message: string): ParsedMessage {
 export function cleanMessage(message: string): string {
   return message
     .replace(/\[([a-zA-Z]*?)\]/g, '') // 感情タグを除去
-    .replace(/\[CHOICES\].*?\[\/CHOICES\]/s, '') // 選択肢タグを除去
+    // .replace(/\[CHOICES\].*?\[\/CHOICES\]/s, '') // 選択肢タグを除去
     .trim();
 }
