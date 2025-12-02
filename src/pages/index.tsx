@@ -14,6 +14,7 @@ import { getChatResponseStream } from "@/features/chat/openAiChat";
 import { Introduction } from "@/components/introduction";
 import { Menu } from "@/components/menu";
 import { Meta } from "@/components/meta";
+import { parseChoices, Choice } from "@/utils/choiceParser";
 
 export default function Home() {
   const { viewer } = useContext(ViewerContext);
@@ -25,6 +26,7 @@ export default function Home() {
   const [chatProcessing, setChatProcessing] = useState(false);
   const [chatLog, setChatLog] = useState<Message[]>([]);
   const [assistantMessage, setAssistantMessage] = useState("");
+  const [hasChoices, setHasChoices] = useState(false);
 
   useEffect(() => {
     if (window.localStorage.getItem("chatVRMParams")) {
@@ -73,6 +75,7 @@ export default function Home() {
 
   /**
    * アシスタントとの会話を行う
+   * 送信ボタンが押された時の処理
    */
   const handleSendChat = useCallback(
     async (text: string) => {
@@ -86,6 +89,7 @@ export default function Home() {
       if (newMessage == null) return;
 
       setChatProcessing(true);
+      setHasChoices(false); // 処理開始時は選択肢を非表示
       // ユーザーの発言を追加して表示
       const messageLog: Message[] = [
         ...chatLog,
@@ -160,7 +164,8 @@ export default function Home() {
             // 文ごとに音声を生成 & 再生、返答を表示
             const currentAssistantMessage = sentences.join(" ");
             handleSpeakAi(aiTalks[0], () => {
-              setAssistantMessage(currentAssistantMessage);
+              // console.log("currentAssistantMessage: " + currentAssistantMessage);
+              // setAssistantMessage(currentAssistantMessage);
             });
           }
         }
@@ -171,16 +176,41 @@ export default function Home() {
         reader.releaseLock();
       }
 
+      // 残りのメッセージがあれば追加
+      if (receivedMessage.trim()) {
+        aiTextLog += `${tag} ${receivedMessage}`;
+      }
+
+      console.log("aiTextLog: " + aiTextLog);
+      // ストリーミング完了後に最終メッセージを設定（選択肢タグも含む完全な状態）
+      setAssistantMessage(aiTextLog);
+
       // アシスタントの返答をログに追加
       const messageLogAssistant: Message[] = [
-        ...messageLog,
+        ...messageLog, 
         { role: "assistant", content: aiTextLog },
       ];
 
       setChatLog(messageLogAssistant);
+
+      // 選択肢があるかチェック
+      // const parsed = parseChoices(aiTextLog);
+      // setHasChoices(parsed.hasChoices);
+
       setChatProcessing(false);
     },
     [systemPrompt, chatLog, handleSpeakAi, openAiKey, koeiroParam]
+  );
+
+  /**
+   * 選択肢がクリックされたときの処理
+   */
+  const handleChoiceSelect = useCallback(
+    (choice: Choice) => {
+      // 選択肢の番号を送信
+      handleSendChat(choice.number);
+    },
+    [handleSendChat]
   );
 
   return (
@@ -193,10 +223,13 @@ export default function Home() {
         onChangeKoeiromapKey={setKoeiromapKey}
       />
       <VrmViewer />
-      <MessageInputContainer
-        isChatProcessing={chatProcessing}
-        onChatProcessStart={handleSendChat}
-      />
+      {/* 選択肢がある場合はテキスト入力を非表示 */}
+      {!hasChoices && (
+        <MessageInputContainer
+          isChatProcessing={chatProcessing}
+          onChatProcessStart={handleSendChat}
+        />
+      )}
       <Menu
         openAiKey={openAiKey}
         systemPrompt={systemPrompt}
@@ -204,6 +237,7 @@ export default function Home() {
         koeiroParam={koeiroParam}
         assistantMessage={assistantMessage}
         koeiromapKey={koeiromapKey}
+        isProcessing={chatProcessing}
         onChangeAiKey={setOpenAiKey}
         onChangeSystemPrompt={setSystemPrompt}
         onChangeChatLog={handleChangeChatLog}
@@ -211,6 +245,7 @@ export default function Home() {
         handleClickResetChatLog={() => setChatLog([])}
         handleClickResetSystemPrompt={() => setSystemPrompt(SYSTEM_PROMPT)}
         onChangeKoeiromapKey={setKoeiromapKey}
+        onChoiceSelect={handleChoiceSelect}
       />
     </div>
   );

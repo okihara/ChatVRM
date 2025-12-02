@@ -5,6 +5,7 @@ import React, { useCallback, useContext, useRef, useState } from "react";
 import { Settings } from "./settings";
 import { ViewerContext } from "@/features/vrmViewer/viewerContext";
 import { AssistantText } from "./assistantText";
+import { Choice } from "@/utils/choiceParser";
 
 type Props = {
   openAiKey: string;
@@ -13,6 +14,7 @@ type Props = {
   koeiroParam: KoeiroParam;
   assistantMessage: string;
   koeiromapKey: string;
+  isProcessing?: boolean;
   onChangeSystemPrompt: (systemPrompt: string) => void;
   onChangeAiKey: (key: string) => void;
   onChangeChatLog: (index: number, text: string) => void;
@@ -20,6 +22,7 @@ type Props = {
   handleClickResetChatLog: () => void;
   handleClickResetSystemPrompt: () => void;
   onChangeKoeiromapKey: (key: string) => void;
+  onChoiceSelect?: (choice: Choice) => void;
 };
 export const Menu = ({
   openAiKey,
@@ -28,6 +31,7 @@ export const Menu = ({
   koeiroParam,
   assistantMessage,
   koeiromapKey,
+  isProcessing,
   onChangeSystemPrompt,
   onChangeAiKey,
   onChangeChatLog,
@@ -35,6 +39,7 @@ export const Menu = ({
   handleClickResetChatLog,
   handleClickResetSystemPrompt,
   onChangeKoeiromapKey,
+  onChoiceSelect,
 }: Props) => {
   const [showSettings, setShowSettings] = useState(false);
   const [showChatLog, setShowChatLog] = useState(false);
@@ -155,7 +160,11 @@ export const Menu = ({
         />
       )}
       {!showChatLog && assistantMessage && (
-        <AssistantText message={assistantMessage} />
+        <AssistantText
+          message={assistantMessage}
+          onChoiceSelect={onChoiceSelect}
+          isProcessing={isProcessing}
+        />
       )}
       <input
         type="file"
