@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from "react";
 import { parseChoices, Choice } from "@/utils/choiceParser";
 
 type Props = {
@@ -7,11 +8,39 @@ type Props = {
 };
 
 export const AssistantText = ({ message, onChoiceSelect, isProcessing }: Props) => {
-  console.log("AssistantText message: " + message);
   const parsed = parseChoices(message);
 
   // 感情タグを除去したテキスト
   const cleanText = parsed.textBeforeChoices.replace(/\[([a-zA-Z]*?)\]/g, "");
+
+  // 文字送り用のstate
+  const [displayedText, setDisplayedText] = useState("");
+  const [isTypingComplete, setIsTypingComplete] = useState(false);
+  const previousMessageRef = useRef<string>("");
+
+  // 文字送りエフェクト
+  useEffect(() => {
+    // メッセージが変わったらリセット
+    if (cleanText !== previousMessageRef.current) {
+      previousMessageRef.current = cleanText;
+      setDisplayedText("");
+      setIsTypingComplete(false);
+    }
+
+    if (!cleanText) {
+      setIsTypingComplete(true);
+      return;
+    }
+
+    if (displayedText.length < cleanText.length) {
+      const timer = setTimeout(() => {
+        setDisplayedText(cleanText.slice(0, displayedText.length + 1));
+      }, 50); // 50msごとに1文字追加
+      return () => clearTimeout(timer);
+    } else {
+      setIsTypingComplete(true);
+    }
+  }, [cleanText, displayedText]);
 
   return (
     <div className="absolute bottom-0 left-0 mb-104 w-full">
@@ -21,14 +50,14 @@ export const AssistantText = ({ message, onChoiceSelect, isProcessing }: Props) 
           <div className="bg-white rounded-8 mb-8" style={{ boxShadow: '0px 0px 24px 19px #FFFFFF', opacity: 0.9 }}>
             <div className="px-24 py-16">
               <div className="line-clamp-10 text-black typography-16 whitespace-pre-wrap">
-                {cleanText}
+                {displayedText}
               </div>
             </div>
           </div>
         )}
 
-        {/* 選択肢ボタン部分 */}
-        {parsed.hasChoices && !isProcessing && (
+        {/* 選択肢ボタン部分 - 文字送り完了後に表示 */}
+        {parsed.hasChoices && !isProcessing && isTypingComplete && (
           <div className="flex flex-col gap-12 mt-8">
             {parsed.choices.map((choice) => (
               <button
