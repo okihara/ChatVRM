@@ -9,6 +9,7 @@ type Props = {
   ) => void;
   onClickSendButton: (event: React.MouseEvent<HTMLButtonElement>) => void;
   onClickMicButton: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 };
 export const MessageInput = ({
   userMessage,
@@ -17,6 +18,7 @@ export const MessageInput = ({
   onChangeUserMessage,
   onClickMicButton,
   onClickSendButton,
+  onKeyDown,
 }: Props) => {
   return (
     <div className="absolute bottom-0 z-20 w-screen">
@@ -34,6 +36,7 @@ export const MessageInput = ({
               type="text"
               placeholder=""
               onChange={onChangeUserMessage}
+              onKeyDown={onKeyDown}
               disabled={isChatProcessing}
               className="bg-surface1 hover:bg-surface1-hover focus:bg-surface1 disabled:bg-surface1-disabled disabled:text-primary-disabled rounded-16 w-full px-16 text-text-primary typography-16 font-bold disabled"
               value={userMessage}
