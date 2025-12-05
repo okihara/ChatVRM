@@ -10,15 +10,20 @@ import {
   PRESET_D,
 } from "@/features/constants/koeiroParam";
 import { Link } from "./link";
+import { AIModel, AI_MODELS } from "@/features/chat/aiModel";
 
 type Props = {
   openAiKey: string;
+  geminiKey: string;
+  aiModel: AIModel;
   systemPrompt: string;
   chatLog: Message[];
   koeiroParam: KoeiroParam;
   koeiromapKey: string;
   onClickClose: () => void;
   onChangeAiKey: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangeGeminiKey: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangeAiModel: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   onChangeSystemPrompt: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onChangeChatLog: (index: number, text: string) => void;
   onChangeKoeiroParam: (x: number, y: number) => void;
@@ -29,6 +34,8 @@ type Props = {
 };
 export const Settings = ({
   openAiKey,
+  geminiKey,
+  aiModel,
   chatLog,
   systemPrompt,
   koeiroParam,
@@ -36,6 +43,8 @@ export const Settings = ({
   onClickClose,
   onChangeSystemPrompt,
   onChangeAiKey,
+  onChangeGeminiKey,
+  onChangeAiModel,
   onChangeChatLog,
   onChangeKoeiroParam,
   onClickOpenVrmFile,
@@ -56,28 +65,71 @@ export const Settings = ({
         <div className="text-text1 max-w-3xl mx-auto px-24 py-64 ">
           <div className="my-24 typography-32 font-bold">設定</div>
           <div className="my-24">
-            <div className="my-16 typography-20 font-bold">OpenAI API キー</div>
-            <input
-              className="text-ellipsis px-16 py-8 w-col-span-2 bg-surface1 hover:bg-surface1-hover rounded-8"
-              type="text"
-              placeholder="sk-..."
-              value={openAiKey}
-              onChange={onChangeAiKey}
-            />
-            <div>
-              APIキーは
-              <Link
-                url="https://platform.openai.com/account/api-keys"
-                label="OpenAIのサイト"
-              />
-              で取得できます。取得したAPIキーをフォームに入力してください。
-            </div>
-            <div className="my-16">
-              ChatGPT
-              APIはブラウザから直接アクセスしています。また、APIキーや会話内容はピクシブのサーバには保存されません。
-              <br />
-              ※利用しているモデルはChatGPT API (GPT-5-mini)です。
-            </div>
+            <div className="my-16 typography-20 font-bold">AIモデル選択</div>
+            <select
+              value={aiModel}
+              onChange={onChangeAiModel}
+              className="px-16 py-8 w-col-span-2 bg-surface1 hover:bg-surface1-hover rounded-8"
+            >
+              {AI_MODELS.map((model) => (
+                <option key={model.value} value={model.value}>
+                  {model.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="my-24">
+            {aiModel === "chatgpt" ? (
+              <>
+                <div className="my-16 typography-20 font-bold">OpenAI API キー</div>
+                <input
+                  className="text-ellipsis px-16 py-8 w-col-span-2 bg-surface1 hover:bg-surface1-hover rounded-8"
+                  type="text"
+                  placeholder="sk-..."
+                  value={openAiKey}
+                  onChange={onChangeAiKey}
+                />
+                <div>
+                  APIキーは
+                  <Link
+                    url="https://platform.openai.com/account/api-keys"
+                    label="OpenAIのサイト"
+                  />
+                  で取得できます。取得したAPIキーをフォームに入力してください。
+                </div>
+                <div className="my-16">
+                  ChatGPT
+                  APIはブラウザから直接アクセスしています。また、APIキーや会話内容はサーバには保存されません。
+                  <br />
+                  ※利用しているモデルはChatGPT API (GPT-4o-mini)です。
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="my-16 typography-20 font-bold">Gemini API キー</div>
+                <input
+                  className="text-ellipsis px-16 py-8 w-col-span-2 bg-surface1 hover:bg-surface1-hover rounded-8"
+                  type="text"
+                  placeholder="AIza..."
+                  value={geminiKey}
+                  onChange={onChangeGeminiKey}
+                />
+                <div>
+                  APIキーは
+                  <Link
+                    url="https://aistudio.google.com/app/apikey"
+                    label="Google AI Studioのサイト"
+                  />
+                  で取得できます。取得したAPIキーをフォームに入力してください。
+                </div>
+                <div className="my-16">
+                  Gemini
+                  APIはブラウザから直接アクセスしています。また、APIキーや会話内容はサーバには保存されません。
+                  <br />
+                  ※利用しているモデルはGemini 1.5 Flashです。
+                </div>
+              </>
+            )}
           </div>
           <div className="my-40">
             <div className="my-16 typography-20 font-bold">
