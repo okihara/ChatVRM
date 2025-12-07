@@ -11,6 +11,7 @@ import { MessageInputContainer } from "@/components/messageInputContainer";
 import { SYSTEM_PROMPT } from "@/features/constants/systemPromptConstants";
 import { KoeiroParam, DEFAULT_PARAM } from "@/features/constants/koeiroParam";
 import { getChatResponseStream } from "@/features/chat/openAiChat";
+import { fetchSystemPrompt } from "@/features/chat/fetchSystemPrompt";
 import { Introduction } from "@/components/introduction";
 import { Menu } from "@/components/menu";
 import { Meta } from "@/components/meta";
@@ -28,12 +29,18 @@ export default function Home() {
   const [assistantMessage, setAssistantMessage] = useState("");
   const [hasChoices, setHasChoices] = useState(false);
 
+  // アプリ起動時にスプレッドシートからシステムプロンプトを取得
+  useEffect(() => {
+    fetchSystemPrompt().then((prompt) => {
+      setSystemPrompt(prompt);
+    });
+  }, []);
+
   useEffect(() => {
     if (window.localStorage.getItem("chatVRMParams")) {
       const params = JSON.parse(
         window.localStorage.getItem("chatVRMParams") as string
       );
-      setSystemPrompt(SYSTEM_PROMPT);
       setKoeiroParam(params.koeiroParam ?? DEFAULT_PARAM);
       setChatLog(params.chatLog ?? []);
     }
