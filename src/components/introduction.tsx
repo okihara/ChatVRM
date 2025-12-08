@@ -1,19 +1,29 @@
 import { useState, useCallback } from "react";
 import { Link } from "./link";
+import { AIModel, AI_MODELS } from "@/features/chat/aiModel";
 
 type Props = {
   openAiKey: string;
+  geminiKey: string;
   koeiroMapKey: string;
+  aiModel: AIModel;
   onChangeAiKey: (openAiKey: string) => void;
+  onChangeGeminiKey: (geminiKey: string) => void;
   onChangeKoeiromapKey: (koeiromapKey: string) => void;
+  onChangeAiModel: (model: AIModel) => void;
 };
 export const Introduction = ({
   openAiKey,
+  geminiKey,
   koeiroMapKey,
+  aiModel,
   onChangeAiKey,
+  onChangeGeminiKey,
   onChangeKoeiromapKey,
+  onChangeAiModel,
 }: Props) => {
-  const [opened, setOpened] = useState(!openAiKey);
+  const currentApiKey = aiModel === "chatgpt" ? openAiKey : geminiKey;
+  const [opened, setOpened] = useState(!currentApiKey);
 
   const handleAiKeyChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,11 +32,25 @@ export const Introduction = ({
     [onChangeAiKey]
   );
 
+  const handleGeminiKeyChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      onChangeGeminiKey(event.target.value);
+    },
+    [onChangeGeminiKey]
+  );
+
   const handleKoeiromapKeyChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       onChangeKoeiromapKey(event.target.value);
     },
     [onChangeKoeiromapKey]
+  );
+
+  const handleAiModelChange = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      onChangeAiModel(event.target.value as AIModel);
+    },
+    [onChangeAiModel]
   );
 
   return opened ? (
@@ -114,26 +138,66 @@ export const Introduction = ({
         </div>
         <div className="my-24">
           <div className="my-8 font-bold typography-20 text-secondary">
-            OpenAI APIキー
+            AIモデル選択
           </div>
-          <input
-            type="text"
-            placeholder="sk-..."
-            value={openAiKey}
-            onChange={handleAiKeyChange}
-            className="my-4 px-16 py-8 w-full h-40 bg-surface3 hover:bg-surface3-hover rounded-4 text-ellipsis"
-          ></input>
-          <div>
-            APIキーは
-            <Link
-              url="https://platform.openai.com/account/api-keys"
-              label="OpenAIのサイト"
-            />
-            で取得できます。取得したAPIキーをフォームに入力してください。
-          </div>
+          <select
+            value={aiModel}
+            onChange={handleAiModelChange}
+            className="my-4 px-16 py-8 w-full h-40 bg-surface3 hover:bg-surface3-hover rounded-4"
+          >
+            {AI_MODELS.map((model) => (
+              <option key={model.value} value={model.value}>
+                {model.label}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="my-24">
+          {aiModel === "chatgpt" ? (
+            <>
+              <div className="my-8 font-bold typography-20 text-secondary">
+                OpenAI APIキー
+              </div>
+              <input
+                type="text"
+                placeholder="sk-..."
+                value={openAiKey}
+                onChange={handleAiKeyChange}
+                className="my-4 px-16 py-8 w-full h-40 bg-surface3 hover:bg-surface3-hover rounded-4 text-ellipsis"
+              ></input>
+              <div>
+                APIキーは
+                <Link
+                  url="https://platform.openai.com/account/api-keys"
+                  label="OpenAIのサイト"
+                />
+                で取得できます。取得したAPIキーをフォームに入力してください。
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="my-8 font-bold typography-20 text-secondary">
+                Gemini APIキー
+              </div>
+              <input
+                type="text"
+                placeholder="AIza..."
+                value={geminiKey}
+                onChange={handleGeminiKeyChange}
+                className="my-4 px-16 py-8 w-full h-40 bg-surface3 hover:bg-surface3-hover rounded-4 text-ellipsis"
+              ></input>
+              <div>
+                APIキーは
+                <Link
+                  url="https://aistudio.google.com/app/apikey"
+                  label="Google AI Studioのサイト"
+                />
+                で取得できます。取得したAPIキーをフォームに入力してください。
+              </div>
+            </>
+          )}
           <div className="my-16">
-            ChatGPT
-            APIはブラウザから直接アクセスしています。また、APIキーや会話内容はピクシブのサーバには保存されません。
+            APIはブラウザから直接アクセスしています。また、APIキーや会話内容はサーバには保存されません。
           </div>
         </div>
         <div className="my-24">
