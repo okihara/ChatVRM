@@ -40,8 +40,8 @@ export default function Home() {
       setSystemPrompt(SYSTEM_PROMPT);
       setKoeiroParam(params.koeiroParam ?? DEFAULT_PARAM);
       setChatLog(params.chatLog ?? []);
-      // setAiModel(params.aiModel ?? DEFAULT_AI_MODEL);
-      setAiModel(DEFAULT_AI_MODEL);
+      setAiModel(params.aiModel ?? DEFAULT_AI_MODEL);
+      // setAiModel(DEFAULT_AI_MODEL);
     }
   }, []);
 
