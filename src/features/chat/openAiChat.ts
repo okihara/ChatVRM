@@ -37,7 +37,7 @@ export async function getChatResponseStream(
   });
 
   const stream = await openai.chat.completions.create({
-    model: "gpt-5.1",
+    model: "gpt-4o-mini",
     messages: messages,
     stream: true,
     max_completion_tokens: 1000,

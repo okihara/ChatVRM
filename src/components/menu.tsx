@@ -6,9 +6,12 @@ import { Settings } from "./settings";
 import { ViewerContext } from "@/features/vrmViewer/viewerContext";
 import { AssistantText } from "./assistantText";
 import { Choice } from "@/utils/choiceParser";
+import { AIModel } from "@/features/chat/aiModel";
 
 type Props = {
   openAiKey: string;
+  geminiKey: string;
+  aiModel: AIModel;
   systemPrompt: string;
   chatLog: Message[];
   koeiroParam: KoeiroParam;
@@ -17,6 +20,8 @@ type Props = {
   isProcessing?: boolean;
   onChangeSystemPrompt: (systemPrompt: string) => void;
   onChangeAiKey: (key: string) => void;
+  onChangeGeminiKey: (key: string) => void;
+  onChangeAiModel: (model: AIModel) => void;
   onChangeChatLog: (index: number, text: string) => void;
   onChangeKoeiromapParam: (param: KoeiroParam) => void;
   handleClickResetChatLog: () => void;
@@ -26,6 +31,8 @@ type Props = {
 };
 export const Menu = ({
   openAiKey,
+  geminiKey,
+  aiModel,
   systemPrompt,
   chatLog,
   koeiroParam,
@@ -34,6 +41,8 @@ export const Menu = ({
   isProcessing,
   onChangeSystemPrompt,
   onChangeAiKey,
+  onChangeGeminiKey,
+  onChangeAiModel,
   onChangeChatLog,
   onChangeKoeiromapParam,
   handleClickResetChatLog,
@@ -58,6 +67,20 @@ export const Menu = ({
       onChangeAiKey(event.target.value);
     },
     [onChangeAiKey]
+  );
+
+  const handleGeminiKeyChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      onChangeGeminiKey(event.target.value);
+    },
+    [onChangeGeminiKey]
+  );
+
+  const handleAiModelChange = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      onChangeAiModel(event.target.value as AIModel);
+    },
+    [onChangeAiModel]
   );
 
   const handleChangeKoeiromapKey = useCallback(
@@ -144,12 +167,16 @@ export const Menu = ({
       {showSettings && (
         <Settings
           openAiKey={openAiKey}
+          geminiKey={geminiKey}
+          aiModel={aiModel}
           chatLog={chatLog}
           systemPrompt={systemPrompt}
           koeiroParam={koeiroParam}
           koeiromapKey={koeiromapKey}
           onClickClose={() => setShowSettings(false)}
           onChangeAiKey={handleAiKeyChange}
+          onChangeGeminiKey={handleGeminiKeyChange}
+          onChangeAiModel={handleAiModelChange}
           onChangeSystemPrompt={handleChangeSystemPrompt}
           onChangeChatLog={onChangeChatLog}
           onChangeKoeiroParam={handleChangeKoeiroParam}

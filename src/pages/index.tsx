@@ -12,6 +12,8 @@ import { SYSTEM_PROMPT } from "@/features/constants/systemPromptConstants";
 import { KoeiroParam, DEFAULT_PARAM } from "@/features/constants/koeiroParam";
 import { getChatResponseStream } from "@/features/chat/openAiChat";
 import { fetchSystemPrompt } from "@/features/chat/fetchSystemPrompt";
+import { getGeminiChatResponseStream } from "@/features/chat/geminiChat";
+import { AIModel, DEFAULT_AI_MODEL } from "@/features/chat/aiModel";
 import { Introduction } from "@/components/introduction";
 import { Menu } from "@/components/menu";
 import { Meta } from "@/components/meta";
@@ -22,6 +24,8 @@ export default function Home() {
 
   const [systemPrompt, setSystemPrompt] = useState(SYSTEM_PROMPT);
   const [openAiKey, setOpenAiKey] = useState(process.env.NEXT_PUBLIC_API_KEY || "");
+  const [geminiKey, setGeminiKey] = useState(process.env.NEXT_PUBLIC_GEMINI_API_KEY || "");
+  const [aiModel, setAiModel] = useState<AIModel>(DEFAULT_AI_MODEL);
   const [koeiromapKey, setKoeiromapKey] = useState("");
   const [koeiroParam, setKoeiroParam] = useState<KoeiroParam>(DEFAULT_PARAM);
   const [chatProcessing, setChatProcessing] = useState(false);
@@ -43,6 +47,8 @@ export default function Home() {
       );
       setKoeiroParam(params.koeiroParam ?? DEFAULT_PARAM);
       setChatLog(params.chatLog ?? []);
+      setAiModel(params.aiModel ?? DEFAULT_AI_MODEL);
+      // setAiModel(DEFAULT_AI_MODEL);
     }
   }, []);
 
@@ -50,10 +56,10 @@ export default function Home() {
     process.nextTick(() =>
       window.localStorage.setItem(
         "chatVRMParams",
-        JSON.stringify({ systemPrompt, koeiroParam, chatLog })
+        JSON.stringify({ systemPrompt, koeiroParam, chatLog, aiModel })
       )
     );
-  }, [systemPrompt, koeiroParam, chatLog]);
+  }, [systemPrompt, koeiroParam, chatLog, aiModel]);
 
   const handleChangeChatLog = useCallback(
     (targetIndex: number, text: string) => {
@@ -86,7 +92,8 @@ export default function Home() {
    */
   const handleSendChat = useCallback(
     async (text: string) => {
-      if (!openAiKey) {
+      const currentApiKey = aiModel === "chatgpt" ? openAiKey : geminiKey;
+      if (!currentApiKey) {
         setAssistantMessage("APIキーが入力されていません");
         return;
       }
@@ -104,7 +111,7 @@ export default function Home() {
       ];
       setChatLog(messageLog);
 
-      // Chat GPTへ
+      // AIモデルへ
       const messages: Message[] = [
         {
           role: "system",
@@ -113,12 +120,14 @@ export default function Home() {
         ...messageLog,
       ];
 
-      const stream = await getChatResponseStream(messages, openAiKey).catch(
-        (e) => {
-          console.error(e);
-          return null;
-        }
-      );
+      // 選択したモデルに応じてAPIを呼び出す
+      const stream = await (aiModel === "chatgpt"
+        ? getChatResponseStream(messages, openAiKey)
+        : getGeminiChatResponseStream(messages, geminiKey)
+      ).catch((e) => {
+        console.error(e);
+        return null;
+      });
       if (stream == null) {
         setChatProcessing(false);
         return;
@@ -206,7 +215,7 @@ export default function Home() {
 
       setChatProcessing(false);
     },
-    [systemPrompt, chatLog, handleSpeakAi, openAiKey, koeiroParam]
+    [systemPrompt, chatLog, handleSpeakAi, openAiKey, geminiKey, aiModel, koeiroParam]
   );
 
   /**
@@ -225,9 +234,13 @@ export default function Home() {
       <Meta />
       <Introduction
         openAiKey={openAiKey}
+        geminiKey={geminiKey}
         koeiroMapKey={koeiromapKey}
+        aiModel={aiModel}
         onChangeAiKey={setOpenAiKey}
+        onChangeGeminiKey={setGeminiKey}
         onChangeKoeiromapKey={setKoeiromapKey}
+        onChangeAiModel={setAiModel}
       />
       <VrmViewer />
       {/* 選択肢がある場合はテキスト入力を非表示 */}
@@ -239,6 +252,8 @@ export default function Home() {
       )}
       <Menu
         openAiKey={openAiKey}
+        geminiKey={geminiKey}
+        aiModel={aiModel}
         systemPrompt={systemPrompt}
         chatLog={chatLog}
         koeiroParam={koeiroParam}
@@ -246,6 +261,8 @@ export default function Home() {
         koeiromapKey={koeiromapKey}
         isProcessing={chatProcessing}
         onChangeAiKey={setOpenAiKey}
+        onChangeGeminiKey={setGeminiKey}
+        onChangeAiModel={setAiModel}
         onChangeSystemPrompt={setSystemPrompt}
         onChangeChatLog={handleChangeChatLog}
         onChangeKoeiromapParam={setKoeiroParam}
