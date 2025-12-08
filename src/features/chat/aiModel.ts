@@ -7,4 +7,4 @@ export const AI_MODELS: { value: AIModel; label: string }[] = [
   { value: "gemini", label: "Gemini" },
 ];
 
-export const DEFAULT_AI_MODEL: AIModel = "chatgpt";
+export const DEFAULT_AI_MODEL: AIModel = "gemini";
