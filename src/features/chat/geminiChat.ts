@@ -7,11 +7,19 @@ export async function getGeminiChatResponse(messages: Message[], apiKey: string)
   }
 
   const genAI = new GoogleGenerativeAI(apiKey);
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
   // Convert messages to Gemini format
   const systemMessage = messages.find((m) => m.role === "system");
   const chatMessages = messages.filter((m) => m.role !== "system");
+
+  // Create model with system instruction
+  const model = genAI.getGenerativeModel({
+    model: "gemini-1.5-flash",
+    systemInstruction: systemMessage?.content ? {
+      role: "user",
+      parts: [{ text: systemMessage.content }]
+    } : undefined
+  });
 
   // Build chat history
   const history = chatMessages.slice(0, -1).map((m) => ({
@@ -21,7 +29,6 @@ export async function getGeminiChatResponse(messages: Message[], apiKey: string)
 
   const chat = model.startChat({
     history,
-    systemInstruction: systemMessage?.content,
   });
 
   const lastMessage = chatMessages[chatMessages.length - 1];
@@ -40,11 +47,19 @@ export async function getGeminiChatResponseStream(
   }
 
   const genAI = new GoogleGenerativeAI(apiKey);
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
   // Convert messages to Gemini format
   const systemMessage = messages.find((m) => m.role === "system");
   const chatMessages = messages.filter((m) => m.role !== "system");
+
+  // Create model with system instruction
+  const model = genAI.getGenerativeModel({
+    model: "gemini-1.5-flash",
+    systemInstruction: systemMessage?.content ? {
+      role: "user",
+      parts: [{ text: systemMessage.content }]
+    } : undefined
+  });
 
   // Build chat history
   const history = chatMessages.slice(0, -1).map((m) => ({
@@ -54,7 +69,6 @@ export async function getGeminiChatResponseStream(
 
   const chat = model.startChat({
     history,
-    systemInstruction: systemMessage?.content,
   });
 
   const lastMessage = chatMessages[chatMessages.length - 1];
