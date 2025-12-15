@@ -1,6 +1,8 @@
 import OpenAI from "openai";
 import { Message } from "../messages/messages";
 
+const OPENAI_MODEL = "gpt-5.2";
+
 export async function getChatResponse(messages: Message[], apiKey: string) {
   if (!apiKey) {
     throw new Error("Invalid API Key");
@@ -12,7 +14,7 @@ export async function getChatResponse(messages: Message[], apiKey: string) {
   });
 
   const completion = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
+    model: OPENAI_MODEL,
     messages: messages,
     max_completion_tokens: 100,
     temperature: 0.7,
@@ -37,7 +39,7 @@ export async function getChatResponseStream(
   });
 
   const stream = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
+    model: OPENAI_MODEL,
     messages: messages,
     stream: true,
     max_completion_tokens: 1000,
