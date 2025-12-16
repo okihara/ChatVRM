@@ -1,114 +1,41 @@
 import { Message } from "@/features/messages/messages";
-import { KoeiroParam } from "@/features/constants/koeiroParam";
 import { ChatLog } from "./chatLog";
-import React, { useCallback, useContext, useRef, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Settings } from "./settings";
-import { ViewerContext } from "@/features/vrmViewer/viewerContext";
 import { AssistantText } from "./assistantText";
 import { Choice } from "@/utils/choiceParser";
 import { AIModel } from "@/features/chat/aiModel";
 
 type Props = {
-  openAiKey: string;
-  geminiKey: string;
   aiModel: AIModel;
   systemPrompt: string;
   chatLog: Message[];
-  koeiroParam: KoeiroParam;
   assistantMessage: string;
-  koeiromapKey: string;
   isProcessing?: boolean;
-  onChangeSystemPrompt: (systemPrompt: string) => void;
-  onChangeAiKey: (key: string) => void;
-  onChangeGeminiKey: (key: string) => void;
   onChangeAiModel: (model: AIModel) => void;
   onChangeChatLog: (index: number, text: string) => void;
-  onChangeKoeiromapParam: (param: KoeiroParam) => void;
   handleClickResetChatLog: () => void;
-  handleClickResetSystemPrompt: () => void;
-  onChangeKoeiromapKey: (key: string) => void;
   onChoiceSelect?: (choice: Choice) => void;
 };
 export const Menu = ({
-  openAiKey,
-  geminiKey,
   aiModel,
   systemPrompt,
   chatLog,
-  koeiroParam,
   assistantMessage,
-  koeiromapKey,
   isProcessing,
-  onChangeSystemPrompt,
-  onChangeAiKey,
-  onChangeGeminiKey,
   onChangeAiModel,
   onChangeChatLog,
-  onChangeKoeiromapParam,
   handleClickResetChatLog,
-  handleClickResetSystemPrompt,
-  onChangeKoeiromapKey,
   onChoiceSelect,
 }: Props) => {
   const [showSettings, setShowSettings] = useState(false);
   const [showChatLog, setShowChatLog] = useState(false);
-  const { viewer } = useContext(ViewerContext);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleChangeSystemPrompt = useCallback(
-    (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-      onChangeSystemPrompt(event.target.value);
-    },
-    [onChangeSystemPrompt]
-  );
 
   const handleAiModelChange = useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
       onChangeAiModel(event.target.value as AIModel);
     },
     [onChangeAiModel]
-  );
-
-  const handleChangeKoeiromapKey = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      onChangeKoeiromapKey(event.target.value);
-    },
-    [onChangeKoeiromapKey]
-  );
-
-  const handleChangeKoeiroParam = useCallback(
-    (x: number, y: number) => {
-      onChangeKoeiromapParam({
-        speakerX: x,
-        speakerY: y,
-      });
-    },
-    [onChangeKoeiromapParam]
-  );
-
-  const handleClickOpenVrmFile = useCallback(() => {
-    fileInputRef.current?.click();
-  }, []);
-
-  const handleChangeVrmFile = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const files = event.target.files;
-      if (!files) return;
-
-      const file = files[0];
-      if (!file) return;
-
-      const file_type = file.name.split(".").pop();
-
-      if (file_type === "vrm") {
-        const blob = new Blob([file], { type: "application/octet-stream" });
-        const url = window.URL.createObjectURL(blob);
-        viewer.loadVrm(url);
-      }
-
-      event.target.value = "";
-    },
-    [viewer]
   );
 
   return (
@@ -155,16 +82,10 @@ export const Menu = ({
           aiModel={aiModel}
           chatLog={chatLog}
           systemPrompt={systemPrompt}
-          koeiroParam={koeiroParam}
-          koeiromapKey={koeiromapKey}
           onClickClose={() => setShowSettings(false)}
           onChangeAiModel={handleAiModelChange}
-          onChangeSystemPrompt={handleChangeSystemPrompt}
           onChangeChatLog={onChangeChatLog}
-          onChangeKoeiroParam={handleChangeKoeiroParam}
           onClickResetChatLog={handleClickResetChatLog}
-          onClickResetSystemPrompt={handleClickResetSystemPrompt}
-          onChangeKoeiromapKey={handleChangeKoeiromapKey}
         />
       )}
       {!showChatLog && assistantMessage && (
@@ -174,13 +95,6 @@ export const Menu = ({
           isProcessing={isProcessing}
         />
       )}
-      <input
-        type="file"
-        className="hidden"
-        accept=".vrm"
-        ref={fileInputRef}
-        onChange={handleChangeVrmFile}
-      />
     </>
   );
 };

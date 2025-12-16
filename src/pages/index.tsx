@@ -255,24 +255,14 @@ export default function Home() {
         />
       )}
       <Menu
-        openAiKey={openAiKey}
-        geminiKey={geminiKey}
         aiModel={aiModel}
         systemPrompt={systemPrompt}
         chatLog={chatLog}
-        koeiroParam={koeiroParam}
         assistantMessage={assistantMessage}
-        koeiromapKey={koeiromapKey}
         isProcessing={chatProcessing}
-        onChangeAiKey={setOpenAiKey}
-        onChangeGeminiKey={setGeminiKey}
         onChangeAiModel={setAiModel}
-        onChangeSystemPrompt={setSystemPrompt}
         onChangeChatLog={handleChangeChatLog}
-        onChangeKoeiromapParam={setKoeiroParam}
         handleClickResetChatLog={() => setChatLog([])}
-        handleClickResetSystemPrompt={() => setSystemPrompt(SYSTEM_PROMPT)}
-        onChangeKoeiromapKey={setKoeiromapKey}
         onChoiceSelect={handleChoiceSelect}
       />
     </div>
