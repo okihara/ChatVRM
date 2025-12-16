@@ -232,6 +232,10 @@ export default function Home() {
   return (
     <div className={"font-M_PLUS_2"}>
       <Meta />
+      {/* デバッグ用: システムプロンプトのハッシュ表示 */}
+      <div className="fixed bottom-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded z-50">
+        #{Array.from(systemPrompt).reduce((hash, char) => ((hash << 5) - hash + char.charCodeAt(0)) | 0, 0).toString(16).slice(-8)}
+      </div>
       <Introduction
         openAiKey={openAiKey}
         geminiKey={geminiKey}
