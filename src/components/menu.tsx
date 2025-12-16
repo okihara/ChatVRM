@@ -62,20 +62,6 @@ export const Menu = ({
     [onChangeSystemPrompt]
   );
 
-  const handleAiKeyChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      onChangeAiKey(event.target.value);
-    },
-    [onChangeAiKey]
-  );
-
-  const handleGeminiKeyChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      onChangeGeminiKey(event.target.value);
-    },
-    [onChangeGeminiKey]
-  );
-
   const handleAiModelChange = useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
       onChangeAiModel(event.target.value as AIModel);
@@ -166,21 +152,16 @@ export const Menu = ({
       {showChatLog && <ChatLog messages={chatLog} onClose={() => setShowChatLog(false)} />}
       {showSettings && (
         <Settings
-          openAiKey={openAiKey}
-          geminiKey={geminiKey}
           aiModel={aiModel}
           chatLog={chatLog}
           systemPrompt={systemPrompt}
           koeiroParam={koeiroParam}
           koeiromapKey={koeiromapKey}
           onClickClose={() => setShowSettings(false)}
-          onChangeAiKey={handleAiKeyChange}
-          onChangeGeminiKey={handleGeminiKeyChange}
           onChangeAiModel={handleAiModelChange}
           onChangeSystemPrompt={handleChangeSystemPrompt}
           onChangeChatLog={onChangeChatLog}
           onChangeKoeiroParam={handleChangeKoeiroParam}
-          onClickOpenVrmFile={handleClickOpenVrmFile}
           onClickResetChatLog={handleClickResetChatLog}
           onClickResetSystemPrompt={handleClickResetSystemPrompt}
           onChangeKoeiromapKey={handleChangeKoeiromapKey}

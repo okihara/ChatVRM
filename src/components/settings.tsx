@@ -13,28 +13,21 @@ import { Link } from "./link";
 import { AIModel, AI_MODELS } from "@/features/chat/aiModel";
 
 type Props = {
-  openAiKey: string;
-  geminiKey: string;
   aiModel: AIModel;
   systemPrompt: string;
   chatLog: Message[];
   koeiroParam: KoeiroParam;
   koeiromapKey: string;
   onClickClose: () => void;
-  onChangeAiKey: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onChangeGeminiKey: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onChangeAiModel: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   onChangeSystemPrompt: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onChangeChatLog: (index: number, text: string) => void;
   onChangeKoeiroParam: (x: number, y: number) => void;
-  onClickOpenVrmFile: () => void;
   onClickResetChatLog: () => void;
   onClickResetSystemPrompt: () => void;
   onChangeKoeiromapKey: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 export const Settings = ({
-  openAiKey,
-  geminiKey,
   aiModel,
   chatLog,
   systemPrompt,
@@ -42,12 +35,9 @@ export const Settings = ({
   koeiromapKey,
   onClickClose,
   onChangeSystemPrompt,
-  onChangeAiKey,
-  onChangeGeminiKey,
   onChangeAiModel,
   onChangeChatLog,
   onChangeKoeiroParam,
-  onClickOpenVrmFile,
   onClickResetChatLog,
   onClickResetSystemPrompt,
   onChangeKoeiromapKey,
@@ -77,67 +67,6 @@ export const Settings = ({
                 </option>
               ))}
             </select>
-          </div>
-          <div className="my-24">
-            {aiModel === "chatgpt" ? (
-              <>
-                <div className="my-16 typography-20 font-bold">OpenAI API キー</div>
-                <input
-                  className="text-ellipsis px-16 py-8 w-col-span-2 bg-surface1 hover:bg-surface1-hover rounded-8"
-                  type="text"
-                  placeholder="sk-..."
-                  value={openAiKey}
-                  onChange={onChangeAiKey}
-                />
-                <div>
-                  APIキーは
-                  <Link
-                    url="https://platform.openai.com/account/api-keys"
-                    label="OpenAIのサイト"
-                  />
-                  で取得できます。取得したAPIキーをフォームに入力してください。
-                </div>
-                <div className="my-16">
-                  ChatGPT
-                  APIはブラウザから直接アクセスしています。また、APIキーや会話内容はサーバには保存されません。
-                  <br />
-                  ※利用しているモデルはChatGPT API (GPT-4o-mini)です。
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="my-16 typography-20 font-bold">Gemini API キー</div>
-                <input
-                  className="text-ellipsis px-16 py-8 w-col-span-2 bg-surface1 hover:bg-surface1-hover rounded-8"
-                  type="text"
-                  placeholder="AIza..."
-                  value={geminiKey}
-                  onChange={onChangeGeminiKey}
-                />
-                <div>
-                  APIキーは
-                  <Link
-                    url="https://aistudio.google.com/app/apikey"
-                    label="Google AI Studioのサイト"
-                  />
-                  で取得できます。取得したAPIキーをフォームに入力してください。
-                </div>
-                <div className="my-16">
-                  Gemini
-                  APIはブラウザから直接アクセスしています。また、APIキーや会話内容はサーバには保存されません。
-                  <br />
-                  ※利用しているモデルはGemini 2.0 Flashです。
-                </div>
-              </>
-            )}
-          </div>
-          <div className="my-40">
-            <div className="my-16 typography-20 font-bold">
-              キャラクターモデル
-            </div>
-            <div className="my-8">
-              <TextButton onClick={onClickOpenVrmFile}>VRMを開く</TextButton>
-            </div>
           </div>
           <div className="my-40">
             <div className="my-8">
