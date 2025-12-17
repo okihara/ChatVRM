@@ -2,6 +2,8 @@ import { useContext, useCallback } from "react";
 import { ViewerContext } from "../features/vrmViewer/viewerContext";
 import { buildUrl } from "@/utils/buildUrl";
 
+const DEFAULT_VRM_PATH = "/goldship1216.vrm";
+
 export default function VrmViewer() {
   const { viewer } = useContext(ViewerContext);
 
@@ -9,7 +11,7 @@ export default function VrmViewer() {
     (canvas: HTMLCanvasElement) => {
       if (canvas) {
         viewer.setup(canvas);
-        viewer.loadVrm(buildUrl("/AvatarSample_B.vrm"));
+        viewer.loadVrm(buildUrl(DEFAULT_VRM_PATH));
 
         // Drag and DropでVRMを差し替え
         canvas.addEventListener("dragover", function (event) {
