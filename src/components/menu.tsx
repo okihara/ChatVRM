@@ -11,6 +11,7 @@ type Props = {
   systemPrompt: string;
   chatLog: Message[];
   assistantMessage: string;
+  userMessage: string;
   isProcessing?: boolean;
   onChangeAiModel: (model: AIModel) => void;
   onChangeChatLog: (index: number, text: string) => void;
@@ -22,6 +23,7 @@ export const Menu = ({
   systemPrompt,
   chatLog,
   assistantMessage,
+  userMessage,
   isProcessing,
   onChangeAiModel,
   onChangeChatLog,
@@ -88,9 +90,10 @@ export const Menu = ({
           onClickResetChatLog={handleClickResetChatLog}
         />
       )}
-      {!showChatLog && assistantMessage && (
+      {!showChatLog && (assistantMessage || userMessage) && (
         <AssistantText
           message={assistantMessage}
+          userMessage={userMessage}
           onChoiceSelect={onChoiceSelect}
           isProcessing={isProcessing}
         />

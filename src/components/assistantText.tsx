@@ -3,11 +3,12 @@ import { parseChoices, Choice } from "@/utils/choiceParser";
 
 type Props = {
   message: string;
+  userMessage?: string;
   onChoiceSelect?: (choice: Choice) => void;
   isProcessing?: boolean;
 };
 
-export const AssistantText = ({ message, onChoiceSelect, isProcessing }: Props) => {
+export const AssistantText = ({ message, userMessage, onChoiceSelect, isProcessing }: Props) => {
   const parsed = parseChoices(message);
 
   // 感情タグを除去したテキスト
@@ -45,9 +46,19 @@ export const AssistantText = ({ message, onChoiceSelect, isProcessing }: Props) 
   return (
     <div className="absolute bottom-0 left-0 mb-104 w-full">
       <div className="mx-auto max-w-4xl w-full p-16">
+        {/* ユーザーメッセージ部分 */}
+        {userMessage && (
+          <div className="rounded-8 mb-8 ml-auto max-w-[80%]" style={{ backgroundColor: '#dbeafe', boxShadow: '0px 0px 12px 8px rgba(59, 130, 246, 0.3)', opacity: 0.9 }}>
+            <div className="px-24 py-12">
+              <div className="typography-16 whitespace-pre-wrap text-right" style={{ color: '#1e3a5f' }}>
+                {userMessage}
+              </div>
+            </div>
+          </div>
+        )}
         {/* メッセージテキスト部分 */}
         {cleanText && (
-          <div className="bg-white rounded-8 mb-8" style={{ boxShadow: '0px 0px 24px 19px #FFFFFF', opacity: 0.9 }}>
+          <div className="bg-white rounded-8 mb-8" style={{ boxShadow: '0px 0px 8px 4px #FFFFFF', opacity: 0.9 }}>
             <div className="px-24 py-16">
               <div className="line-clamp-10 text-black typography-16 whitespace-pre-wrap">
                 {displayedText}

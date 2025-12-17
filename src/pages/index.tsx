@@ -45,6 +45,7 @@ export default function Home() {
   const [chatProcessing, setChatProcessing] = useState(false);
   const [chatLog, setChatLog] = useState<Message[]>([]);
   const [assistantMessage, setAssistantMessage] = useState("");
+  const [userMessage, setUserMessage] = useState("");
   const [hasChoices, setHasChoices] = useState(false);
 
   // アプリ起動時にスプレッドシートからシステムプロンプトを取得
@@ -118,6 +119,7 @@ export default function Home() {
 
       setChatProcessing(true);
       setHasChoices(false); // 処理開始時は選択肢を非表示
+      setUserMessage(newMessage); // ユーザーメッセージを保存
       // ユーザーの発言を追加して表示
       const messageLog: Message[] = [
         ...chatLog,
@@ -275,6 +277,7 @@ export default function Home() {
         systemPrompt={systemPrompt}
         chatLog={chatLog}
         assistantMessage={assistantMessage}
+        userMessage={userMessage}
         isProcessing={chatProcessing}
         onChangeAiModel={setAiModel}
         onChangeChatLog={handleChangeChatLog}
