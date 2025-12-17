@@ -78,7 +78,7 @@ export const AssistantText = ({ message, userMessage, onChoiceSelect, isProcessi
         )}
         {/* 選択肢ボタン部分 - 文字送り完了後に表示、処理中は暗くする */}
         {parsed.hasChoices && isTypingComplete && (
-          <div className={`flex flex-col gap-12 mb-8 transition-opacity duration-300 ${isProcessing ? 'opacity-30 pointer-events-none' : ''}`}>
+          <div className={`flex flex-col mb-8 transition-opacity duration-300 ${isProcessing ? 'opacity-30 pointer-events-none' : ''}`} style={{ gap: '8px' }}>
             {parsed.choices.map((choice) => (
               <button
                 key={choice.number}
