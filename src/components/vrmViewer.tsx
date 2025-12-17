@@ -2,7 +2,7 @@ import { useContext, useCallback } from "react";
 import { ViewerContext } from "../features/vrmViewer/viewerContext";
 import { buildUrl } from "@/utils/buildUrl";
 
-const DEFAULT_VRM_PATH = "/goldship1216.vrm";
+const DEFAULT_VRM_PATH = "/goldship1217_3.vrm";
 
 export default function VrmViewer() {
   const { viewer } = useContext(ViewerContext);
