@@ -19,6 +19,20 @@ import { Menu } from "@/components/menu";
 import { Meta } from "@/components/meta";
 import { parseChoices, Choice } from "@/utils/choiceParser";
 
+// 画面中央オーバーレイのローディングスピナー
+const LoadingOverlay = () => (
+  <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="bg-white/90 backdrop-blur-sm rounded-full px-40 py-20 shadow-lg flex items-center gap-16">
+      <div className="flex gap-8">
+        <div className="w-16 h-16 bg-primary rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+        <div className="w-16 h-16 bg-primary rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+        <div className="w-16 h-16 bg-primary rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+      </div>
+      <span className="text-black/70 text-lg font-medium">考え中...</span>
+    </div>
+  </div>
+);
+
 export default function Home() {
   const { viewer } = useContext(ViewerContext);
 
@@ -232,6 +246,8 @@ export default function Home() {
   return (
     <div className={"font-M_PLUS_2"}>
       <Meta />
+      {/* ローディングオーバーレイ */}
+      {chatProcessing && <LoadingOverlay />}
       {/* デバッグ用: システムプロンプトのハッシュ表示 */}
       <div className="fixed bottom-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded z-50">
         #{Array.from(systemPrompt).reduce((hash, char) => ((hash << 5) - hash + char.charCodeAt(0)) | 0, 0).toString(16).slice(-8)}
