@@ -103,14 +103,14 @@ export const AssistantText = ({ message, userMessage, onChoiceSelect, isProcessi
           <div
             className="rounded-8 mb-8 ml-auto max-w-[80%] transition-all duration-300 ease-out"
             style={{
-              backgroundColor: '#dbeafe',
-              boxShadow: '0px 0px 12px 8px rgba(59, 130, 246, 0.3)',
-              opacity: userMessageAnimating ? 0.9 : 0,
+              backgroundColor: '#dcfce7',
+              boxShadow: '0px 0px 12px 8px rgba(34, 197, 94, 0.3)',
+              opacity: userMessageAnimating ? 0.75 : 0,
               transform: userMessageAnimating ? 'translateX(0)' : 'translateX(20px)',
             }}
           >
-            <div className="px-24 py-12">
-              <div className="typography-16 whitespace-pre-wrap text-right" style={{ color: '#1e3a5f' }}>
+            <div className="px-24 py-16">
+              <div className="typography-20 font-bold whitespace-pre-wrap text-right" style={{ color: '#1e3a5f' }}>
                 {displayedUserMessage}
               </div>
             </div>
