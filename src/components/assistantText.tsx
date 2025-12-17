@@ -22,11 +22,10 @@ export const AssistantText = ({ message, userMessage, onChoiceSelect, isProcessi
   // ユーザーメッセージのアニメーション用state
   const [userMessageAnimating, setUserMessageAnimating] = useState(false);
   const [displayedUserMessage, setDisplayedUserMessage] = useState<string>("");
-  const previousProcessingRef = useRef<boolean>(false);
 
-  // isProcessingがfalse→trueに変わったとき（新しいメッセージ送信時）にアニメーションをトリガー
+  // userMessageが変わったときにアニメーションをトリガー
   useEffect(() => {
-    if (isProcessing && !previousProcessingRef.current && userMessage) {
+    if (userMessage) {
       // まず消すアニメーション
       setUserMessageAnimating(false);
       // 少し待ってから新しいメッセージを設定してアニメーション開始
@@ -36,11 +35,9 @@ export const AssistantText = ({ message, userMessage, onChoiceSelect, isProcessi
           setUserMessageAnimating(true);
         });
       }, 150); // 消えるアニメーション分待つ
-      previousProcessingRef.current = !!isProcessing;
       return () => clearTimeout(timer);
     }
-    previousProcessingRef.current = !!isProcessing;
-  }, [isProcessing, userMessage]);
+  }, [userMessage]);
 
   // 文字送りエフェクト
   useEffect(() => {
@@ -79,9 +76,9 @@ export const AssistantText = ({ message, userMessage, onChoiceSelect, isProcessi
             </div>
           </div>
         )}
-        {/* 選択肢ボタン部分 - 文字送り完了後に表示 */}
-        {parsed.hasChoices && !isProcessing && isTypingComplete && (
-          <div className="flex flex-col gap-12 mb-8">
+        {/* 選択肢ボタン部分 - 文字送り完了後に表示、処理中は暗くする */}
+        {parsed.hasChoices && isTypingComplete && (
+          <div className={`flex flex-col gap-12 mb-8 transition-opacity duration-300 ${isProcessing ? 'opacity-30 pointer-events-none' : ''}`}>
             {parsed.choices.map((choice) => (
               <button
                 key={choice.number}
@@ -92,6 +89,7 @@ export const AssistantText = ({ message, userMessage, onChoiceSelect, isProcessi
                   boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.5)',
                   opacity: 0.8,
                 }}
+                disabled={isProcessing}
               >
                 <span className="font-bold mr-8">{choice.number}.</span>
                 <span>{choice.text}</span>
