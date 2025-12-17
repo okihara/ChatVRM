@@ -22,13 +22,13 @@ import { parseChoices, Choice } from "@/utils/choiceParser";
 // 画面中央オーバーレイのローディングスピナー
 const LoadingOverlay = () => (
   <div className="fixed inset-0 z-50 flex items-center justify-center">
-    <div className="bg-white/90 backdrop-blur-sm rounded-full px-40 py-20 shadow-lg flex items-center gap-16">
-      <div className="flex gap-8">
-        <div className="w-16 h-16 bg-primary rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-        <div className="w-16 h-16 bg-primary rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-        <div className="w-16 h-16 bg-primary rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+    <div className="bg-white/90 backdrop-blur-sm rounded-full px-48 py-24 shadow-xl flex items-center gap-20">
+      <div className="flex gap-10">
+        <div className="w-24 h-24 bg-primary rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+        <div className="w-24 h-24 bg-primary rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+        <div className="w-24 h-24 bg-primary rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
       </div>
-      <span className="text-black/70 text-lg font-medium">考え中...</span>
+      <span className="text-black/70 text-3xl font-medium">考え中...</span>
     </div>
   </div>
 );
@@ -240,7 +240,7 @@ export default function Home() {
   const handleChoiceSelect = useCallback(
     (choice: Choice) => {
       // 選択肢の番号を送信
-      handleSendChat(choice.number);
+      handleSendChat(`${choice.number}`);
     },
     [handleSendChat]
   );
